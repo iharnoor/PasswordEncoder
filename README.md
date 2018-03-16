@@ -1,4 +1,4 @@
-# Password Encoded
+# PasswordEncoder
 
 An app that encode password into Chemistry Symbols to make it secure and easier to manage.
 
