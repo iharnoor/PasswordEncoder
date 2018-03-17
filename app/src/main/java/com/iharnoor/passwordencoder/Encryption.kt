@@ -2,14 +2,16 @@ package com.iharnoor.passwordencoder
 
 import java.util.HashMap
 
-class Encryption {
+class Encryption() {
     fun encode(message: String, key: Int): String {
-        var message = caesarEncrypt(message, key)
+        val message = caesarEncrypt(message, key)
         var chemStr = ""
         val chemSymbols = chemSymbols()
         for (i in 0..message.length - 1) {
             val currentChar = message[i]
-            chemStr += chemSymbols.get(currentChar.toInt())
+            if (chemSymbols.get(currentChar.toInt()) != null)
+                chemStr += chemSymbols.get(currentChar.toInt())
+            else chemStr += currentChar
         }
         return chemStr
     }
@@ -19,23 +21,29 @@ class Encryption {
         var output = ""
         var i = 0
         while (i < message.length) {
-            val currentPair = message.substring(i, i + 2)
-            if (chemU.containsValue(currentPair)) {
+            var currentPair = ""
+            currentPair += message.getOrNull(i)
+            currentPair += message.getOrNull(i + 1)
+            var decoded2 = '0'
+            if (isLetter(currentPair[0]) && isLetter(currentPair[1])) {
                 val decoded = getKeyFromValue(chemU, currentPair) as Int
-                val decoded2 = decoded.toChar()
+                decoded2 = decoded.toChar()
                 output += decoded2
+            } else if (!isLetter(currentPair[0])) {
+                output += currentPair[0]
+                i++
+                continue
             } else {
-                println("Error finding the Value in HashMap")
+                output += decoded2
                 break
             }
             i += 2
         }
-        val caesarDecoded = output
-        output = caesarEncrypt(output, 26 - key)
+        output = caesarEncrypt(output, 26 - key) // Caesar's Decrypt
         return output
     }
 
-    fun getKeyFromValue(hm: HashMap<*, *>, value: Any): Any? {
+    private fun getKeyFromValue(hm: HashMap<*, *>, value: Any): Any? {
         for (o in hm.keys)
             if (hm[o] == value)
                 return o
@@ -43,10 +51,9 @@ class Encryption {
     }
 
     private fun caesarEncrypt(message: String, key: Int): String {
-        var i: Int
+        var i = 0
         var ch: Char
         val encoded = StringBuilder()
-        i = 0
         while (i < message.length) {
             ch = message[i]
             if (ch in 'a'..'z') {//is lower case
@@ -61,6 +68,11 @@ class Encryption {
         }
         return encoded.toString()
     }
+
+    fun isLetter(c: Char): Boolean {
+        return c in 'a'..'z' || c in 'A'..'Z'
+    }
+
 
     private fun chemSymbols(): HashMap<Int, String> {
         val chem = HashMap<Int, String>()

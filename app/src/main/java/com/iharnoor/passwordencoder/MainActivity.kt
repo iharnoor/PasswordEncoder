@@ -14,7 +14,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         encodeButton.setOnClickListener {
             onClickEncode()
         }
@@ -28,20 +27,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onClickEncode() {
-        if (!isEmpty(keyInput) && !isEmpty(passwordInput) && keyInput.text.toString().toInt() > 0 && keyInput.text.toString().toInt()<27) {
+        if (!isEmpty(keyInput) && !isEmpty(passwordInput) && keyInput.text.toString().toInt() > 0 && keyInput.text.toString().toInt() < 27) {
             val encodedMessage = encryptionObj.encode(passwordInput.text.toString(), keyInput.text.toString().toInt())
-            Toast.makeText(this, "encodedMessage is $encodedMessage", Toast.LENGTH_LONG).show()
             Log.v("encoded Message", "encoded message = $encodedMessage")
             decodedOutput.setText(encodedMessage)
         } else decodedOutput.setText("Please enter both Message and Key");
-        Toast.makeText(this, "onClickEncode works", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "To test: Copy the ENCODED text and paste it in the " +
+                "password text field and use the same KEY for decoding", Toast.LENGTH_LONG).show()
     }
 
     fun onClickDecode() {
-        if (!isEmpty(keyInput) && !isEmpty(passwordInput)&& keyInput.text.toString().toInt() > 0 && keyInput.text.toString().toInt()<27) {
+        if (!isEmpty(keyInput) && !isEmpty(passwordInput) && keyInput.text.toString().toInt() > 0 && keyInput.text.toString().toInt() < 27) {
             val decodedMessage = encryptionObj.decode(passwordInput.text.toString(), keyInput.text.toString().toInt())
             decodedOutput.setText(decodedMessage)
         } else decodedOutput.setText("Please enter both Message and Key");
-        Toast.makeText(this, "onClickDecode works", Toast.LENGTH_LONG).show()
     }
 }
