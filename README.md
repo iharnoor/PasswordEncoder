@@ -1,4 +1,4 @@
-# PasswordEncoder. Status: Almost Complete
+# PasswordEncoder. Status: Complete
 
 An app that encode password into Chemistry Symbols to make it secure and easier to manage.
 
