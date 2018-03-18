@@ -26,20 +26,24 @@ class MainActivity : AppCompatActivity() {
         return etText.text.toString().trim { it <= ' ' }.isEmpty()
     }
 
-    fun onClickEncode() {
+    private fun onClickEncode() {
         if (!isEmpty(keyInput) && !isEmpty(passwordInput) && keyInput.text.toString().toInt() > 0 && keyInput.text.toString().toInt() < 27) {
             val encodedMessage = encryptionObj.encode(passwordInput.text.toString(), keyInput.text.toString().toInt())
             Log.v("encoded Message", "encoded message = $encodedMessage")
             decodedOutput.setText(encodedMessage)
-        } else decodedOutput.setText("Please enter both Message and Key");
-        Toast.makeText(this, "To test: Copy the ENCODED text and paste it in the " +
-                "password text field and use the same KEY for decoding", Toast.LENGTH_LONG).show()
+            printLabel.text = "To test: Copy the ENCODED text and paste it in the \n" +
+                    "password text field and use the same KEY for decoding"
+        } else printLabel.text = "Please enter both Message and Key"
     }
 
-    fun onClickDecode() {
-        if (!isEmpty(keyInput) && !isEmpty(passwordInput) && keyInput.text.toString().toInt() > 0 && keyInput.text.toString().toInt() < 27) {
-            val decodedMessage = encryptionObj.decode(passwordInput.text.toString(), keyInput.text.toString().toInt())
-            decodedOutput.setText(decodedMessage)
-        } else decodedOutput.setText("Please enter both Message and Key");
+    private fun onClickDecode() {
+        try {
+            if (!isEmpty(keyInput) && !isEmpty(passwordInput) && keyInput.text.toString().toInt() > 0 && keyInput.text.toString().toInt() < 27) {
+                val decodedMessage = encryptionObj.decode(passwordInput.text.toString(), keyInput.text.toString().toInt())
+                decodedOutput.setText(decodedMessage)
+            } else printLabel.text = "Please enter both Message and Key"
+        } catch (e: TypeCastException) {
+            printLabel.text = "Make sure that your PASSWORD Text is encoded for Decoding: Must contain Chemistry Symbols"
+        }
     }
 }
